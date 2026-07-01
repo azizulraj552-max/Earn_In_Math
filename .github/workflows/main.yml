@@ -20,6 +20,8 @@ jobs:
       - name: Build APK
         run: |
           npm install --legacy-peer-deps
+          # যদি কনফিগারেশন ফাইল www ফোল্ডারে থাকে তবে রুটে কপি করা
+          [ -f "www/capacitor.config.json" ] && cp www/capacitor.config.json .
           npx cap add android || true
           npx cap sync
           cd android
