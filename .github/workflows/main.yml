@@ -19,17 +19,16 @@ jobs:
 
       - name: Build Android App
         run: |
-          # সব ডিপেন্ডেন্সি ইনস্টল করা
           npm install --legacy-peer-deps
-          
-          # ক্যাপাসিটর কনফিগ নিশ্চিত করা (www ফোল্ডার থেকে রুটে কপি)
           [ -f "www/capacitor.config.json" ] && cp www/capacitor.config.json .
           
-          # অ্যান্ড্রয়েড ফোল্ডার নতুন করে তৈরি করা
-          npx cap add android
+          # যদি android ফোল্ডার না থাকে তবেই যোগ করবে
+          if [ ! -d "android" ]; then
+            npx cap add android
+          fi
+          
           npx cap sync
           
-          # বিল্ড করা
           cd android
           chmod +x gradlew
           ./gradlew clean assembleDebug
