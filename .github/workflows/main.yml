@@ -17,13 +17,19 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build APK
+      - name: Build Android App
         run: |
+          # সব ডিপেন্ডেন্সি ইনস্টল করা
           npm install --legacy-peer-deps
-          # যদি কনফিগারেশন ফাইল www ফোল্ডারে থাকে তবে রুটে কপি করা
+          
+          # ক্যাপাসিটর কনফিগ নিশ্চিত করা (www ফোল্ডার থেকে রুটে কপি)
           [ -f "www/capacitor.config.json" ] && cp www/capacitor.config.json .
-          npx cap add android || true
+          
+          # অ্যান্ড্রয়েড ফোল্ডার নতুন করে তৈরি করা
+          npx cap add android
           npx cap sync
+          
+          # বিল্ড করা
           cd android
           chmod +x gradlew
           ./gradlew clean assembleDebug
