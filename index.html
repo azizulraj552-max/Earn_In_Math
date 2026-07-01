@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Earn_in_Math</title>
+  <style>
+    :root{
+      --bg:#050816;
+      --panel:#0f172a;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --cyan:#22d3ee;
+      --pink:#fb7185;
+      --lime:#a3e635;
+      --gold:#fbbf24;
+      --blue:#38bdf8;
+      --red:#ef4444;
+      --green:#22c55e;
+      --neon1:#0ea5e9;
+      --neon2:#8b5cf6;
+      --neon3:#ec4899;
+    }
+    *{box-sizing:border-box;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#0b1228 0,#050816 45%,#02040b 100%);color:var(--text);overflow-x:hidden}
+    .wrap{max-width:560px;margin:0 auto;min-height:100vh;padding:10px;display:flex;flex-direction:column;gap:10px}
+    .panel,.card,.banner,.leaderbox,.modalcontent,.notice{background:rgba(15,23,42,.94);border:1px solid rgba(148,163,184,.14);border-radius:18px;box-shadow:0 10px 25px rgba(0,0,0,.3);backdrop-filter:blur(8px)}
+    .header{position:relative;padding:12px;overflow:hidden}
+    .header::before{content:"";position:absolute;inset:-2px;border-radius:18px;background:conic-gradient(from 0deg,var(--cyan),var(--pink),var(--lime),var(--gold),var(--cyan));filter:blur(16px);opacity:.55;animation:spin 8s linear infinite}
+    @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+    .header-inner{position:relative;z-index:1;display:flex;align-items:center;gap:12px;justify-content:space-between}
+    .logoBox{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:#000;border:1px solid rgba(255,255,255,.14);box-shadow:0 0 18px rgba(34,211,238,.18);flex:none}
+    .logoBox svg{width:34px;height:34px}
+    .titleWrap{flex:1;min-width:0}
+    .title{font-size:26px;font-weight:900;letter-spacing:.5px;background:linear-gradient(90deg,#fff,#22d3ee,#fb7185,#a3e635,#fbbf24,#fff);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .subtitle{font-size:12px;color:#cbd5e1;line-height:1.4}
+    .rightStack{display:flex;flex-direction:column;gap:8px;min-width:160px;align-items:flex-end}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:linear-gradient(180deg,#0f766e,#155e75);border:1px solid rgba(255,255,255,.08);font-weight:800;white-space:nowrap}
+    .miniBtn{border:none;cursor:pointer;color:#fff;padding:10px 12px;border-radius:14px;background:linear-gradient(90deg,var(--neon1),var(--neon2),var(--neon3));border:1px solid rgba(255,255,255,.08);font-weight:800;width:100%}
+    .marquee{overflow:hidden;white-space:nowrap;border-radius:999px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.16);padding:8px 0}
+    .marquee span{display:inline-block;padding-left:100%;animation:marq 16s linear infinite;color:#67e8f9;font-weight:800}
+    @keyframes marq{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+    .banner{height:60px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#cbd5e1}
+    .leaderbox{padding:12px}
+    .leaderhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .ticker{height:72px;overflow:hidden}
+    .ticker ul{list-style:none;margin:0;padding:0;animation:scrollUp 12s linear infinite}
+    .ticker li{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed rgba(148,163,184,.15);font-size:13px}
+    @keyframes scrollUp{0%{transform:translateY(100%)}100%{transform:translateY(-100%)}}
+    .card{padding:14px}
+    .timerwrap{display:flex;justify-content:center;margin-bottom:10px}
+    .timer{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:6px solid var(--blue);background:#07111f;font-size:26px;font-weight:900;box-shadow:0 0 20px rgba(56,189,248,.2)}
+    .question{text-align:center;font-size:26px;font-weight:900;line-height:1.25;margin:10px 0 14px}
+    .answers{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0}
+    .btn{border:none;border-radius:14px;padding:14px 12px;font-size:17px;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(90deg,var(--neon1),var(--neon2),var(--neon3));transition:transform .15s ease,opacity .15s ease;box-shadow:0 8px 18px rgba(37,99,235,.16)}
+    .btn:active{transform:scale(.98);opacity:.92}
+    .btn.red{background:linear-gradient(180deg,#dc2626,#b91c1c)}
+    .msg{min-height:24px;text-align:center;margin-top:8px;font-weight:800}
+    .msg.ok{color:#86efac}.msg.bad{color:#fca5a5}.msg.info{color:#93c5fd}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .row>*{flex:1}
+    input{width:100%;padding:12px 12px;border-radius:12px;border:1px solid rgba(148,163,184,.25);background:#0b1220;color:#fff;outline:none}
+    label{font-size:13px;color:#cbd5e1;display:block;margin:8px 0 6px}
+    .footerBtns{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+    .hidden{display:none !important}
+    .overlay{position:fixed;inset:0;background:rgba(2,6,23,.78);display:flex;align-items:center;justify-content:center;padding:16px;z-index:60}
+    .modalcontent{width:100%;max-width:430px;padding:16px}
+    .small{font-size:12px;color:var(--muted);line-height:1.5}
+    .notify{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#0b1220;border:1px solid rgba(255,255,255,.12);color:#fff;padding:10px 14px;border-radius:999px;z-index:80;display:none}
+    .quizCard{background:linear-gradient(180deg, rgba(14,165,233,.18), rgba(139,92,246,.14), rgba(236,72,153,.12));border:1px solid rgba(56,189,248,.18);box-shadow:0 0 30px rgba(56,189,248,.08)}
+    .notice{padding:12px 14px;border-left:4px solid var(--cyan)}
+    .notice strong{color:#f8fafc}
+    .notice .small{margin-top:4px}
+    .rulesBox{max-height:45vh;overflow:auto}
+    .rulesItem{padding:8px 0;border-bottom:1px solid rgba(148,163,184,.12)}
+    .refLinkBox{margin-top:10px;padding:10px;border-radius:14px;background:#0b1220;border:1px solid rgba(255,255,255,.08);word-break:break-all;font-size:12px;color:#cbd5e1}
+    .refBtnArea{margin-top:10px;display:flex;gap:10px}
+    .refBtnArea .btn{flex:1}
+    .ad-inner{width:100%;height:300px;background:#000;border-radius:14px;overflow:hidden}
+    .ad-iframe{width:100%;height:100%;border:none}
+  </style>
+</head>
+<body>
+  <div id="loginOverlay" class="overlay">
+    <div class="modalcontent">
+      <div class="header" style="margin-bottom:12px">
+        <div class="header-inner">
+          <div class="logoBox">
+            <svg viewBox="0 0 64 64" fill="none">
+              <rect x="6" y="6" width="52" height="52" rx="14" fill="#08111f" stroke="#38bdf8" stroke-width="2"/>
+              <path d="M18 42c6-16 22-24 30-24-7 7-9 16-8 28" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+              <path d="M21 44h22" stroke="#22d3ee" stroke-width="4" stroke-linecap="round"/>
+              <path d="M24 19h10" stroke="#fb7185" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="titleWrap">
+            <div class="title">Earn_in_Math</div>
+            <div class="subtitle">Math করে টাকা ইনকাম করার প্রফেশনাল গেম</div>
+          </div>
+        </div>
+      </div>
+      <label>Name</label>
+      <input id="nameInput" placeholder="আপনার নাম" />
+      <label>Email</label>
+      <input id="emailInput" type="email" placeholder="name@gmail.com" />
+      <label>Password</label>
+      <input id="passInput" type="password" placeholder="password" />
+      <div class="footerBtns">
+        <button class="btn" onclick="signup()">Sign Up</button>
+        <button class="btn" onclick="login()">Login</button>
+      </div>
+      <div id="authError" class="msg bad"></div>
+    </div>
+  </div>
+
+  <div id="rulesOverlay" class="overlay hidden">
+    <div class="modalcontent">
+      <div class="title" style="font-size:22px">📜 App Rules</div>
+      <p class="small">নিচের নিয়মগুলো মেনে অ্যাপ ব্যবহার করুন।</p>
+      <div id="rulesList" class="notice rulesBox"></div>
+      <div class="footerBtns">
+        <button class="btn" onclick="closeRules()">Close</button>
+        <button class="btn" onclick="openWhatsappComplaint()">WhatsApp Complaint</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="referralOverlay" class="overlay hidden">
+    <div class="modalcontent">
+      <div class="title" style="font-size:22px">বন্ধুকে জানিয়ে আয় করো</div>
+      <p class="small">নিচের referral link কপি করে বন্ধুদের পাঠান।</p>
+      <div id="refLinkText" class="refLinkBox">Loading...</div>
+      <div id="refConditions" class="notice rulesBox" style="margin-top:10px"></div>
+      <div class="refBtnArea">
+        <button class="btn" onclick="copyReferralLink()">Copy Link</button>
+        <button class="btn" onclick="closeReferral()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="vpnOverlay" class="overlay hidden">
+    <div class="modalcontent">
+      <div class="title" style="font-size:22px">🌐 দৃষ্টি আকর্ষণ </div>
+      <p class="small">সততার সাথে কাজ করুন ইনশাআল্লাহ ১০০% পেমেন্ট গ্যারান্টি।</p>
+      <div class="footerBtns">
+        <button class="btn" onclick="dismissVpnNotice()">OK</button>
+        <button class="btn" onclick="showRules()">App Rules</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="quitOverlay" class="overlay hidden">
+    <div class="modalcontent">
+      <div class="title" style="font-size:22px">তুমি কি বের হতে চাচ্ছো</div>
+      <p class="small">না বাটনে চাপ দিলে আবার গেমে ফিরে যাবে।</p>
+      <div class="footerBtns">
+        <button class="btn" onclick="hideQuit()">না</button>
+        <button class="btn red" onclick="exitApp()">হ্যা</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="logoutOverlay" class="overlay hidden">
+    <div class="modalcontent">
+      <div class="title" style="font-size:22px">তুমি কি নিশ্চিত লগআউট করতে চাচ্ছো</div>
+      <p class="small">হ্যা দিলে logout হবে, না দিলে গেমে ফিরে যাবে।</p>
+      <div class="footerBtns">
+        <button class="btn" onclick="hideLogoutConfirm()">না</button>
+        <button class="btn red" onclick="confirmLogoutAction()">হ্যা</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="withdrawStatusOverlay" class="overlay hidden">
+    <div class="modalcontent">
+      <div class="title" style="font-size:22px">Withdraw Status</div>
+      <p class="small" id="withdrawStatusText">Pending...</p>
+      <div class="footerBtns"><button class="btn" onclick="closeWithdrawStatus()">Close</button></div>
+    </div>
+  </div>
+
+  <div id="successOverlay" class="overlay hidden">
+    <div class="modalcontent">
+      <div class="title" style="font-size:22px">তুমি পেরেছো</div>
+      <p class="small">এখনি টাকা নিতে withdraw বাটনে চাপ দাও।</p>
+      <div class="footerBtns">
+        <button class="btn" onclick="openWithdraw();hideSuccess()">Withdraw</button>
+        <button class="btn" onclick="hideSuccess()">Later</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="adOverlay" class="overlay hidden">
+    <div class="modalcontent">
+      <div class="title" style="font-size:22px">ভিডিও এড চলছে</div>
+      <p class="small" id="adText">Please wait...</p>
+      <div class="ad-inner"><iframe id="adFrame" class="ad-iframe" src="about:blank"></iframe></div>
+      <div class="footerBtns">
+        <button class="btn red" id="adCloseBtn" disabled>✕ Close</button>
+        <button class="btn" id="adManualClose" disabled>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="notify" id="notify"></div>
+
+  <div class="wrap">
+    <div class="panel header">
+      <div class="header-inner">
+        <div class="logoBox">
+          <svg viewBox="0 0 64 64" fill="none">
+            <rect x="6" y="6" width="52" height="52" rx="14" fill="#08111f" stroke="#38bdf8" stroke-width="2"/>
+            <path d="M18 42c6-16 22-24 30-24-7 7-9 16-8 28" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+            <path d="M21 44h22" stroke="#22d3ee" stroke-width="4" stroke-linecap="round"/>
+            <path d="M24 19h10" stroke="#fb7185" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="titleWrap">
+          <div class="title">Earn_in_Math</div>
+          <div class="subtitle">গণিত করো, points নাও, withdraw করো</div>
+        </div>
+        <div class="rightStack">
+          <div class="pill">Points: <strong id="points">0</strong></div>
+          <button class="miniBtn" onclick="openReferral()">বন্ধুকে জানিয়ে আয় করো</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="marquee"><span id="refTicker">বন্ধুকে জানিয়ে আয় করো — প্রতি সফল referral এ 100 points।</span></div>
+    <div class="notice"><strong>🌐 দৃষ্টি আকর্ষণ </strong><div class="small">সততার সাথে কাজ করুন ইনশাআল্লাহ ১০০% পেমেন্ট গ্যারান্টি।</div></div>
+
+    <div class="banner">
+      <script>atOptions={key:'c5591d9c27383186cec1a68659fd6e2a',format:'iframe',height:60,width:468,params:{}};</script>
+      <script src="https://www.highperformanceformat.com/c5591d9c27383186cec1a68659fd6e2a/invoke.js"></script>
+    </div>
+
+    <div class="leaderbox">
+      <div class="leaderhead"><div class="small">Top 5 Scorers</div><div class="small">Realtime</div></div>
+      <div class="ticker"><ul id="leaderList"></ul></div>
+    </div>
+
+    <div class="card quizCard">
+      <div class="timerwrap"><div class="timer" id="timer">5</div></div>
+      <div class="question" id="question">Press Start</div>
+      <div class="answers" id="answers"></div>
+      <div id="message" class="msg"></div>
+
+      <button class="btn" style="width:100%;margin-top:8px" onclick="startGame()">গেম খেলুন</button>
+      <button class="btn" style="width:100%;margin-top:8px" id="rewardBtn" onclick="showRewardPrompt()">এড দেখে আয় বাড়াও</button>
+
+      <div class="row" style="margin-top:8px">
+        <button class="btn" onclick="maybeShowInterstitialManual()">আরো পয়েন্ট নিন</button>
+        <button class="btn" onclick="showRules()">App Rules</button>
+      </div>
+
+      <div class="row" style="margin-top:8px">
+        <button class="btn" onclick="showMoreIncome()">আরো ইনকাম করুন</button>
+        <button class="btn" id="withdrawBtn" onclick="openWithdraw()">Withdraw</button>
+      </div>
+
+      <div class="row" style="margin-top:8px">
+        <button class="btn red" onclick="confirmLogout()">Logout</button>
+        <button class="btn red" onclick="confirmQuit()">Exit</button>
+      </div>
+    </div>
+
+    <div class="banner">
+      <script>atOptions={key:'c5591d9c27383186cec1a68659fd6e2a',format:'iframe',height:60,width:468,params:{}};</script>
+      <script src="https://www.highperformanceformat.com/c5591d9c27383186cec1a68659fd6e2a/invoke.js"></script>
+    </div>
+  </div>
+
+  <div id="ad-container" class="overlay hidden" style="background:rgba(0,0,0,0.9);z-index:70;">
+    <div class="modalcontent">
+      <div class="title" style="font-size:22px">Advertisement</div>
+      <p class="small" id="internalAdText">Please wait...</p>
+      <div id="ad-content-wrapper" class="ad-inner"></div>
+      <div class="footerBtns">
+        <button id="adContainerCloseBtn" class="btn red" disabled>✕ Close Ad</button>
+        <button class="btn" onclick="hideAdContainer()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, db, fn } from "./firebase-config.js";
+    import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, setPersistence, browserLocalPersistence, getIdTokenResult } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+    import { ref, get, set, update, push, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
+
+    await setPersistence(auth, browserLocalPersistence);
+    const creditReferralBonus = httpsCallable(fn, "creditReferralBonus");
+    const APP_SETTINGS = { contactWhatsapp:"https://wa.me/8801880110552", referralBase: location.origin + location.pathname, rules:["📌 ভিপিএন কানেক্ট না করে বেশী বেশী এড দেখুন পয়েন্ট নিন।","📌 একটি ফোনে একের বেশি অ্যাকাউন্ট খোলার চেষ্টা করলে account blocked হতে পারে।","📌 Auto-clicker, bot, বা hacking software ব্যবহার নিষিদ্ধ।","📌 Withdraw request review time 24 থেকে 48 ঘণ্টা হতে পারে।","📌 ভুল payment number দিলে support team দায়ী থাকবে না।","📌 Fake referral বা duplicate activity করলে bonus বাতিল হতে পারে।"] };
+    const AD_URL = "https://www.effectivecpmnetwork.com/tprvyzw8f7?key=a4ece46ab521df479a52a7779e62c3ea";
+    const state = { user:null, points:0, q:null, timer:5, timerId:null, interstitialLast:0, rewardLast:0, correctCount:0, withdrawThreshold:1000, withdrawDeduct:1000, rewardCooldownMs:2*60*1000, interstitialCooldownMs:3*60*1000, usedQuestions:new Set(), referralCount:0, appLink:APP_SETTINGS.referralBase, wsUnsub:null, rewardTimer:null, adTimerInterval:null, adContainerTimer:null, adComplete:false, rememberVpnDismiss:false };
+    const $ = s => document.querySelector(s);
+    const showMsg = (t,c="info") => { $("#message").textContent = t; $("#message").className = "msg " + c; };
+    const authMsg = t => { $("#authError").textContent = t || ""; };
+    const toast = t => { const n=$("#notify"); n.textContent=t; n.style.display="block"; clearTimeout(window.__nt); window.__nt=setTimeout(()=>n.style.display="none",1800); };
+    const showOverlay = id => $(id).classList.remove("hidden");
+    const hideOverlay = id => $(id).classList.add("hidden");
+    function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+    function sound(freq=440,dur=0.07,vol=0.02){ try{ const a=new (window.AudioContext||window.webkitAudioContext)(); const o=a.createOscillator(); const g=a.createGain(); o.type="sine"; o.frequency.value=freq; g.gain.value=vol; o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime+dur);}catch(e){} }
+    document.addEventListener("click", e => { if(e.target && e.target.tagName === "BUTTON") sound(520,0.06,0.02); });
+    function fmtCountdown(ms){ const sec=Math.max(0,Math.ceil(ms/1000)); const m=Math.floor(sec/60); const s=sec%60; return `${m} মিনিট ${s} সেকেন্ড`; }
+    function updateRewardButton(){ const left = state.rewardCooldownMs - (Date.now() - state.rewardLast); $("#rewardBtn").textContent = left <= 0 ? "এড দেখে আয় বাড়াও" : `Wait ${fmtCountdown(left)}`; }
+    function updateReferralTicker(){ $("#refTicker").textContent = `বন্ধুকে জানিয়ে আয় করো — প্রতি সফল referral এ 100 points। • সফল share: ${state.referralCount} জন`; }
+    function renderRules(){ $("#rulesList").innerHTML = APP_SETTINGS.rules.map(r => `<div class="rulesItem">${r}</div>`).join("") + `<div class="rulesItem"><strong>WhatsApp:</strong> আপনার সমস্যা জানাতে WhatsApp-এ মেসেজ করুন।</div>`; }
+    function renderReferral(){ const link = `${state.appLink}?ref=${encodeURIComponent(state.user.uid.slice(0,8))}`; $("#refLinkText").textContent = link; $("#refConditions").innerHTML = APP_SETTINGS.rules.map(r => `<div class="rulesItem">${r}</div>`).join("") + `<div class="rulesItem"><strong>Referral bonus:</strong> প্রতিটি valid referral-এ 100 points.</div>`; }
+    function showRules(){ renderRules(); showOverlay("#rulesOverlay"); }
+    function closeRules(){ hideOverlay("#rulesOverlay"); }
+    function openReferral(){ if(!state.user) return alert("Login first"); renderReferral(); showOverlay("#referralOverlay"); }
+    function closeReferral(){ hideOverlay("#referralOverlay"); }
+    function openWhatsappComplaint(){ window.open(APP_SETTINGS.contactWhatsapp, "_blank"); }
+    function dismissVpnNotice(){ state.rememberVpnDismiss = true; hideOverlay("#vpnOverlay"); }
+    function hideQuit(){ hideOverlay("#quitOverlay"); }
+    function hideLogoutConfirm(){ hideOverlay("#logoutOverlay"); }
+    function hideSuccess(){ hideOverlay("#successOverlay"); }
+    function closeWithdrawStatus(){ hideOverlay("#withdrawStatusOverlay"); }
+    function copyFallback(text){ const ta=document.createElement("textarea"); ta.value=text; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); }catch(e){} document.body.removeChild(ta); }
+    async function copyText(text){ try{ if(navigator.clipboard?.writeText){ await navigator.clipboard.writeText(text); return true; } }catch(e){} copyFallback(text); return false; }
+    async function copyReferralLink(){ if(!state.user) return alert("Login first"); await copyText(`${state.appLink}?ref=${encodeURIComponent(state.user.uid.slice(0,8))}`); toast("Referral link copied"); }
+
+    async function exitApp(){ try{ await signOut(auth); }catch(e){} window.close(); setTimeout(() => location.href = "about:blank", 150); }
+
+    async function ensureUserDoc(user, name){
+      const uref = ref(db, `users/${user.uid}`);
+      const snap = await get(uref);
+      if(!snap.exists()){
+        await set(uref,{ name:name || user.displayName || "Player", email:user.email, points:0, weeklyScore:0, role:"user", createdAt:Date.now(), referralCode:user.uid.slice(0,8), successfulReferrals:0, lastLoginAt:Date.now(), adComplete:false });
+      } else {
+        await update(uref,{ lastLoginAt:Date.now() });
+      }
+      const sref = ref(db, `scores/${user.uid}`);
+      const ss = await get(sref);
+      if(!ss.exists()) await set(sref,{ name:name || user.displayName || "Player", score:0, updatedAt:Date.now() });
+    }
+
+    async function syncFromDb(user){
+      const snap = await get(ref(db, `users/${user.uid}`));
+      if(snap.exists()){
+        const d = snap.val();
+        state.points = d.points || 0;
+        state.referralCount = d.successfulReferrals || 0;
+        $("#points").textContent = state.points;
+        updateReferralTicker();
+        if(state.points >= 1000) $("#successOverlay").classList.remove("hidden");
+      }
+    }
+
+    async function refreshClaims(){
+      try{
+        if(!state.user) return;
+        const token = await getIdTokenResult(state.user, true);
+        localStorage.setItem(`is_admin_${state.user.uid}`, token.claims.admin ? "1" : "0");
+        localStorage.setItem(`is_superadmin_${state.user.uid}`, token.claims.superadmin ? "1" : "0");
+      }catch(e){}
+    }
+
+    async function signup(){
+      try{
+        authMsg("");
+        const name = $("#nameInput").value.trim();
+        const email = $("#emailInput").value.trim();
+        const pass = $("#passInput").value.trim();
+        if(!name || !email || !pass) return alert("সব তথ্য দিন");
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+        await updateProfile(cred.user, { displayName: name });
+        await ensureUserDoc(cred.user, name);
+        state.user = cred.user;
+        hideOverlay("#loginOverlay");
+        await refreshClaims();
+        await syncFromDb(cred.user);
+        await loadLeaderboard();
+        startUiTimers();
+        attachWithdrawListener();
+        await applyReferralIfAny(cred.user);
+        startGame();
+        if(!state.rememberVpnDismiss) showOverlay("#vpnOverlay");
+      }catch(e){ authMsg((e.code || "") + " " + (e.message || "Signup failed")); }
+    }
+
+    async function login(){
+      try{
+        authMsg("");
+        const email = $("#emailInput").value.trim();
+        const pass = $("#passInput").value.trim();
+        if(!email || !pass) return alert("Email/password দিন");
+        const cred = await signInWithEmailAndPassword(auth, email, pass);
+        state.user = cred.user;
+        hideOverlay("#loginOverlay");
+        await ensureUserDoc(cred.user, cred.user.displayName || "Player");
+        await refreshClaims();
+        await syncFromDb(cred.user);
+        await loadLeaderboard();
+        startUiTimers();
+        attachWithdrawListener();
+        await restoreWithdrawPending();
+        startGame();
+        if(!state.rememberVpnDismiss) showOverlay("#vpnOverlay");
+      }catch(e){ authMsg((e.code || "") + " " + (e.message || "Login failed")); }
+    }
+
+    async function doLogout(){ await signOut(auth); location.reload(); }
+    function confirmQuit(){ showOverlay("#quitOverlay"); }
+    function confirmLogout(){ showOverlay("#logoutOverlay"); }
+
+    window.signup = signup;
+    window.login = login;
+    window.confirmQuit = confirmQuit;
+    window.hideQuit = hideQuit;
+    window.confirmLogout = confirmLogout;
+    window.hideLogoutConfirm = hideLogoutConfirm;
+    window.confirmLogoutAction = doLogout;
+    window.hideSuccess = hideSuccess;
+    window.closeWithdrawStatus = closeWithdrawStatus;
+    window.showRules = showRules;
+    window.closeRules = closeRules;
+    window.openWhatsappComplaint = openWhatsappComplaint;
+    window.dismissVpnNotice = dismissVpnNotice;
+    window.exitApp = exitApp;
+    window.openReferral = openReferral;
+    window.closeReferral = closeReferral;
+    window.copyReferralLink = copyReferralLink;
+
+    function startUiTimers(){ clearInterval(state.rewardTimer); state.rewardTimer = setInterval(updateRewardButton, 1000); updateRewardButton(); }
+    function seenQuestion(qk){ if(state.usedQuestions.has(qk)) return true; state.usedQuestions.add(qk); return false; }
+
+    function makeQuestion(){
+      let a,b,answer,text,opts,tries=0;
+      while(tries < 30){
+        tries++;
+        const kind = randInt(1,3);
+        if(kind===1){ a = randInt(2, 40) * 2; b = randInt(2, 40) * 2; answer = a + b; text = `${a} + ${b} = ?`; }
+        else if(kind===2){ b = randInt(2, 20) * 2; a = b + randInt(2, 20) * 2; answer = a - b; text = `${a} - ${b} = ?`; }
+        else{ a = randInt(2, 6); b = randInt(2, 6); answer = a * b; text = `${a} × ${b} = ?`; }
+        const qk = `${text}|${answer}`;
+        if(!seenQuestion(qk)){
+          const setOpts = new Set([answer]);
+          while(setOpts.size < 3){
+            const delta = randInt(-8, 8);
+            const v = Math.max(1, answer + (delta === 0 ? 1 : delta));
+            setOpts.add(v);
+          }
+          opts = [...setOpts].sort(() => Math.random() - 0.5);
+          state.q = { text, answer, options: opts };
+          break;
+        }
+      }
+      $("#question").textContent = state.q.text;
+      $("#answers").innerHTML = "";
+      state.q.options.forEach(v => {
+        const b = document.createElement("button");
+        b.className = "btn";
+        b.textContent = v;
+        b.onclick = () => checkAnswer(v);
+        $("#answers").appendChild(b);
+      });
+    }
+
+    function startRound(){
+      clearInterval(state.timerId);
+      state.timer = 5;
+      $("#timer").textContent = state.timer;
+      makeQuestion();
+      state.timerId = setInterval(() => {
+        state.timer--;
+        $("#timer").textContent = state.timer;
+        if(state.timer <= 0){
+          clearInterval(state.timerId);
+          showMsg("Time up. Next question...", "bad");
+          setTimeout(startRound, 700);
+        }
+      }, 1000);
+    }
+
+    function startGame(){ if(!state.user) return alert("Login first"); startRound(); }
+
+    async function markAdComplete(flag){
+      state.adComplete = !!flag;
+      if(state.user) await update(ref(db, `users/${state.user.uid}`), { adComplete: state.adComplete, adUpdatedAt: Date.now() });
+    }
+
+    async function addPoints(delta){
+      if(!state.user) return;
+      const uref = ref(db, `users/${state.user.uid}`);
+      const sref = ref(db, `scores/${state.user.uid}`);
+      await runTransaction(uref, u => { if(!u) return u; u.points = Math.max(0, (u.points || 0) + delta); return u; });
+      await runTransaction(sref, s => { if(!s) return s; s.score = Math.max(0, (s.score || 0) + delta); s.name = state.user.displayName || s.name || "Player"; s.updatedAt = Date.now(); return s; });
+      await syncFromDb(state.user);
+      await loadLeaderboard();
+      if(state.points >= 1000) $("#successOverlay").classList.remove("hidden");
+    }
+
+    async function checkAnswer(v){
+      if(!state.q) return;
+      if(v === state.q.answer){
+        await addPoints(5);
+        state.correctCount++;
+        showMsg("সঠিক উত্তর", "ok");
+        clearInterval(state.timerId);
+        if(state.correctCount >= 10){
+          state.correctCount = 0;
+          state.rewardLast = Date.now();
+          updateRewardButton();
+          await showRewardAd();
+          startRound();
+        }else{
+          setTimeout(startRound, 400);
+        }
+      }else{
+        showMsg("ভুল উত্তর", "bad");
+      }
+    }
+
+    function showRewardPrompt(){ showRewardAd(); }
+
+    async function showRewardAd(){
+      state.rewardLast = Date.now();
+      state.adComplete = false;
+      await markAdComplete(false);
+      updateRewardButton();
+      $("#adText").textContent = "বিজ্ঞাপনটি লোড হচ্ছে... দয়া করে ৪ সেকেন্ড অপেক্ষা করুন।";
+      $("#adCloseBtn").disabled = true;
+      $("#adManualClose").disabled = true;
+      showOverlay("#adOverlay");
+      $("#adFrame").src = AD_URL;
+      window.open(AD_URL, "_blank");
+      setTimeout(() => {
+        let secondsLeft = 15;
+        $("#adText").textContent = "অপেক্ষা করুন " + secondsLeft + " সেকেন্ড তারপর X বাটনে চাপ দিয়ে আপনার পয়েন্ট নিন।";
+        state.adTimerInterval = setInterval(() => {
+          secondsLeft--;
+          if (secondsLeft > 0) {
+            $("#adText").textContent = "অপেক্ষা করুন " + secondsLeft + " সেকেন্ড তারপর X বাটনে চাপ দিয়ে আপনার পয়েন্ট নিন।";
+          } else {
+            clearInterval(state.adTimerInterval);
+            state.adComplete = true;
+            $("#adText").textContent = "আপনার সময় শেষ হয়েছে! এখন X চেপে ১০ পয়েন্ট সংগ্রহ করুন।";
+            $("#adCloseBtn").disabled = false;
+            $("#adManualClose").disabled = false;
+          }
+        }, 1000);
+      }, 4000);
+    }
+
+    async function confirmAdClose(){
+      if($("#adCloseBtn").disabled) return;
+      hideOverlay("#adOverlay");
+      if(state.adTimerInterval) clearInterval(state.adTimerInterval);
+      await markAdComplete(true);
+      await addPoints(10);
+      alert("পয়েন্ট যোগ হয়েছে");
+    }
+
+    function maybeShowInterstitialManual(){ showInterstitial(true); }
+    function showInterstitial(manual=false){
+      const now = Date.now();
+      if(now - state.interstitialLast < state.interstitialCooldownMs){
+        showMsg("আরো পয়েন্ট নিন: wait time active", "bad");
+        return;
+      }
+      state.interstitialLast = now;
+      window.open(AD_URL, "_blank");
+      alert(manual ? "Interstitial ad shown" : "Auto interstitial ad shown");
+      showMsg("Interstitial ad shown", "ok");
+    }
+
+    async function openWithdraw(){
+      if(!state.user) return alert("Login first");
+      if(state.points < state.withdrawThreshold) return alert(`${state.withdrawThreshold} points লাগবে`);
+      const pending = localStorage.getItem(`withdraw_pending_${state.user.uid}`);
+      if(pending) return alert("Your withdraw is already pending");
+      const method = prompt("উড্রো মেথড লিখুন: Bkash / Nagad / Rocket"); if(!method) return;
+      const number = prompt("Payment number"); if(!number) return;
+      const reqRef = push(ref(db, "requests"));
+      await set(reqRef, { uid: state.user.uid, name: state.user.displayName || state.user.email, method, number, points: state.withdrawThreshold, amount: 50, status: "pending", createdAt: Date.now() });
+      localStorage.setItem(`withdraw_pending_${state.user.uid}`, reqRef.key);
+      await addPoints(-state.withdrawDeduct);
+      alert("Withdraw request sent. Status: Pending");
+      $("#withdrawStatusText").textContent = "Pending — admin approve করলে status পরিবর্তন হবে";
+      showOverlay("#withdrawStatusOverlay");
+    }
+
+    async function restoreWithdrawPending(){
+      if(!state.user) return;
+      const pendId = localStorage.getItem(`withdraw_pending_${state.user.uid}`);
+      if(!pendId){ $("#withdrawBtn").textContent = "Withdraw"; return; }
+      const snap = await get(ref(db, `requests/${pendId}`));
+      if(snap.exists() && snap.val().status === "pending"){
+        $("#withdrawBtn").textContent = "Pending";
+        $("#withdrawStatusText").textContent = "Your request is Pending";
+      }else{
+        $("#withdrawBtn").textContent = "Withdraw";
+        localStorage.removeItem(`withdraw_pending_${state.user.uid}`);
+      }
+    }
+
+    async function applyReferralIfAny(user){
+      const params = new URLSearchParams(location.search);
+      const refCode = params.get("ref");
+      if(!refCode) return;
+      const usedKey = `ref_used_${user.uid}`;
+      if(localStorage.getItem(usedKey)) return;
+      try{
+        await creditReferralBonus({ ownerUid: refCode });
+        localStorage.setItem(usedKey, "1");
+        toast("Referral bonus credited");
+      }catch(e){
+        console.error("Referral bonus error:", e);
+      }
+    }
+
+    async function attachWithdrawListener(){
+      if(!state.user) return;
+      const pendId = localStorage.getItem(`withdraw_pending_${state.user.uid}`);
+      if(!pendId) return;
+      if(state.wsUnsub) state.wsUnsub();
+      state.wsUnsub = onValue(ref(db, `requests/${pendId}`), snap => {
+        if(!snap.exists()) return;
+        const d = snap.val();
+        if(d.status === "pending"){
+          $("#withdrawBtn").textContent = "Pending";
+        }else{
+          $("#withdrawBtn").textContent = "Withdraw";
+          localStorage.removeItem(`withdraw_pending_${state.user.uid}`);
+          if(d.status === "approved") toast("Withdraw approved");
+          if(d.status === "rejected") toast("Withdraw rejected");
+        }
+      });
+    }
+
+    async function loadLeaderboard(){
+      try{
+        if(!state.user) return;
+        const snap = await get(ref(db, "scores"));
+        const data = snap.val() || {};
+        const list = Object.values(data).sort((a,b)=>(b.score||0)-(a.score||0)).slice(0,5);
+        $("#leaderList").innerHTML = list.map(x=>`<li><span>${x.name}</span><span>${x.score}</span></li>`).join("") || "<li><span>No scores</span><span>0</span></li>";
+      }catch(e){
+        $("#leaderList").innerHTML = "<li><span>Permission denied</span><span>0</span></li>";
+      }
+    }
+
+    function showMoreIncome(){ showRewardPrompt(); }
+
+    window.showRewardPrompt = showRewardPrompt;
+    window.showMoreIncome = showMoreIncome;
+    window.openWithdraw = openWithdraw;
+    window.startGame = startGame;
+    window.maybeShowInterstitialManual = maybeShowInterstitialManual;
+    window.confirmAdClose = confirmAdClose;
+    $("#adCloseBtn").onclick = confirmAdClose;
+    $("#adManualClose").onclick = confirmAdClose;
+
+    window.showAppInternalAd = (adUrl, duration = 15) => {
+      const container = document.querySelector("#ad-container");
+      const wrapper = document.querySelector("#ad-content-wrapper");
+      const text = document.querySelector("#internalAdText");
+      const closeBtn = document.querySelector("#adContainerCloseBtn");
+      if(!container || !wrapper || !text || !closeBtn) return;
+      wrapper.innerHTML = `<iframe src="${adUrl}" class="ad-iframe"></iframe>`;
+      text.textContent = `অপেক্ষা করুন ${duration} সেকেন্ড...`;
+      container.classList.remove("hidden");
+      closeBtn.disabled = true;
+      let sec = duration;
+      if(state.adContainerTimer) clearInterval(state.adContainerTimer);
+      state.adContainerTimer = setInterval(() => {
+        sec--;
+        if(sec > 0) text.textContent = `অপেক্ষা করুন ${sec} সেকেন্ড...`;
+        else {
+          clearInterval(state.adContainerTimer);
+          text.textContent = "এখন Close Ad চাপতে পারবেন";
+          closeBtn.disabled = false;
+        }
+      }, 1000);
+    };
+
+    window.hideAdContainer = () => {
+      const container = document.querySelector("#ad-container");
+      const wrapper = document.querySelector("#ad-content-wrapper");
+      const text = document.querySelector("#internalAdText");
+      if(container) container.classList.add("hidden");
+      if(wrapper) wrapper.innerHTML = "";
+      if(text) text.textContent = "Please wait...";
+      if(state.adContainerTimer) clearInterval(state.adContainerTimer);
+    };
+
+    document.querySelector("#adContainerCloseBtn").onclick = () => {
+      hideAdContainer();
+    };
+
+    onAuthStateChanged(auth, async user => {
+      if(user){
+        state.user = user;
+        hideOverlay("#loginOverlay");
+        await ensureUserDoc(user, user.displayName || "Player");
+        await refreshClaims();
+        await syncFromDb(user);
+        await loadLeaderboard();
+        startUiTimers();
+        attachWithdrawListener();
+        await restoreWithdrawPending();
+        if(!state.rememberVpnDismiss) showOverlay("#vpnOverlay");
+      }else{
+        showOverlay("#loginOverlay");
+      }
+    });
+
+    setInterval(() => {
+      if(state.user){
+        updateRewardButton();
+        const left = state.interstitialCooldownMs - (Date.now() - state.interstitialLast);
+        if(left <= 0 && Math.random() < 0.01) showInterstitial(false);
+      }
+    }, 100);
+
+    setInterval(() => {
+      if(state.user) showAppInternalAd(AD_URL, 5);
+    }, 120000);
+  </script>
+</body>
+</html>
